@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GribDotNet", "GribDotNet/GribDotNet.fsproj", "{2D465FE7-95AD-48DE-A99B-47A63B896ACB}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GribDotNet", "GribDotNet\GribDotNet.fsproj", "{2D465FE7-95AD-48DE-A99B-47A63B896ACB}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GribDotNetTests", "GribDotNetTests\GribDotNetTests.fsproj", "{BF27F01B-EDCC-44C6-95CA-E42AF8DCD4E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +15,10 @@ Global
 		{2D465FE7-95AD-48DE-A99B-47A63B896ACB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D465FE7-95AD-48DE-A99B-47A63B896ACB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D465FE7-95AD-48DE-A99B-47A63B896ACB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF27F01B-EDCC-44C6-95CA-E42AF8DCD4E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF27F01B-EDCC-44C6-95CA-E42AF8DCD4E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF27F01B-EDCC-44C6-95CA-E42AF8DCD4E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF27F01B-EDCC-44C6-95CA-E42AF8DCD4E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
