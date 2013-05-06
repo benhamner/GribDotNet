@@ -13,4 +13,7 @@ let readGrib (reader:System.IO.BinaryReader) =
     }
 
 let readGribFromPath (path:string) = 
-    readGrib (new System.IO.BinaryReader(System.IO.File.OpenRead(path)))
+    let reader = (new System.IO.BinaryReader(System.IO.File.OpenRead(path)))
+    let grib = readGrib reader
+    reader.Close()
+    grib
