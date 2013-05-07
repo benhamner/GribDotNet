@@ -11,5 +11,13 @@ let grib = readGribFromPath path
 [<TestFixture>]
 type GribReaderTests() =
     [<Test>]
-    member test.InitialText() =
+    member test.IndicatorSection() =
         grib.IndicatorSection.InitialText |> should equal "GRIB"B
+
+    [<Test>]
+    member test.IdentificationSection() =
+        grib.IdentificationSection.SectionLength |> should equal 21u
+
+    [<Test>]
+    member test.LocalUseSection() =
+        grib.LocalUseSection.SectionLength |> should equal 81u

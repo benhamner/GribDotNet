@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="IndicatorSection.fs" />
     <Compile Include="IdentificationSection.fs" />
+    <Compile Include="LocalUseSection.fs" />
     <Compile Include="GribReader.fs" />
     <None Include="Script.fsx" />
     <None Include="packages.config" />

@@ -50,6 +50,8 @@
   <ItemGroup>
     <Compile Include="FromHex.fs" />
     <Compile Include="IndicatorSectionTests.fs" />
+    <Compile Include="IdentificationSectionTests.fs" />
+    <Compile Include="LocalUseSectionTests.fs" />
     <Compile Include="GribReaderTests.fs" />
     <None Include="Script.fsx" />
     <None Include="packages.config" />

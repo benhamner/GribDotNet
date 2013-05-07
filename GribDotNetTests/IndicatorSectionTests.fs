@@ -11,7 +11,7 @@ let reader = streamFromHex "475249420000000200000000000088f8"
 let indicatorSection = readIndicatorSection reader
 
 [<TestFixture>]
-type GribIndicatorTests() =
+type IndicatorSectionTests() =
     [<Test>]
     member test.InitialText() =
         indicatorSection.InitialText |> should equal "GRIB"B
