@@ -2,9 +2,11 @@
 // for more guidance on F# programming.
 
 #load "IndicatorSection.fs"
-#load "grib2.fs"
+#load "IdentificationSection.fs"
+#load "LocalUseSection.fs"
+#load "GribReader.fs"
 
-open GribDotNet
+open GribReader
 
 // Define your library scripting code here
 

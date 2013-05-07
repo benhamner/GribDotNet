@@ -44,6 +44,12 @@
     <Compile Include="IndicatorSection.fs" />
     <Compile Include="IdentificationSection.fs" />
     <Compile Include="LocalUseSection.fs" />
+    <Compile Include="GridDefinitionSection.fs" />
+    <Compile Include="ProductDefinitionSection.fs" />
+    <Compile Include="DataRepresentationSection.fs" />
+    <Compile Include="BitMapSection.fs" />
+    <Compile Include="DataSection.fs" />
+    <Compile Include="EndSection.fs" />
     <Compile Include="GribReader.fs" />
     <None Include="Script.fsx" />
     <None Include="packages.config" />

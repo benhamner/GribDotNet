@@ -52,6 +52,12 @@
     <Compile Include="IndicatorSectionTests.fs" />
     <Compile Include="IdentificationSectionTests.fs" />
     <Compile Include="LocalUseSectionTests.fs" />
+    <Compile Include="GridDefinitionSectionTests.fs" />
+    <Compile Include="ProductDefinitionSectionTests.fs" />
+    <Compile Include="DataRepresentationSectionTests.fs" />
+    <Compile Include="BitMapSectionTests.fs" />
+    <Compile Include="DataSectionTests.fs" />
+    <Compile Include="EndSectionTests.fs" />
     <Compile Include="GribReaderTests.fs" />
     <None Include="Script.fsx" />
     <None Include="packages.config" />

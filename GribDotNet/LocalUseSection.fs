@@ -16,3 +16,10 @@ let readLocalUseSection (reader:System.IO.BinaryReader) =
         SectionNumber = sectionNumber;
         LocalUse = localUse
     }
+
+let blankLocalUseSection = 
+    {
+        SectionLength = 0u;
+        SectionNumber = 0uy;
+        LocalUse = (Array.zeroCreate(0))
+    }
