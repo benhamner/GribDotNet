@@ -48,6 +48,8 @@ let readGrib (reader:System.IO.BinaryReader) =
 
 let readGribFromPath (path:string) = 
     let reader = (new System.IO.BinaryReader(System.IO.File.OpenRead(path)))
-    let grib = readGrib reader
-    reader.Close()
-    grib
+    try
+        let grib = readGrib reader
+        grib
+    finally
+        reader.Close()
