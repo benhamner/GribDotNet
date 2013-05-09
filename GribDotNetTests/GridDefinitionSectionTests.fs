@@ -38,7 +38,7 @@ type GridDefinitionSectionTests() =
 
     [<Test>]
     member test.GridDefinitionTemplateNumber() =
-        gridDefinitionSection.GridDefinitionTemplateNumber |> should equal 1us
+        gridDefinitionSection.GridDefinitionTemplateType |> should equal (Other 1us)
         
     [<Test>]
     member test.GridDefinitionTemplatePlusList() =

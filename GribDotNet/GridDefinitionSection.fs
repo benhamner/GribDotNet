@@ -1,5 +1,14 @@
 ﻿module GridDefinitionSection
 
+type GridDefinitionTemplateType =
+   | LambertConformal
+   | Other of uint16
+
+let gridDefinitionTemplateTypeFromShort (x:uint16) =
+    match x with
+    | 0us -> LambertConformal
+    | x -> Other x
+
 type GridDefinitionSection = {
     SectionLength: uint32;
     SectionNumber: byte;
@@ -7,7 +16,7 @@ type GridDefinitionSection = {
     NumberOfDataPoints: uint32;
     NumberOfOctetsForOptionalListOfNumbersDefiningNumberOfPoints: byte;
     InterpolationOfListOfNumbersDefiningNumberOfPoints: byte;
-    GridDefinitionTemplateNumber: uint16;
+    GridDefinitionTemplateType: GridDefinitionTemplateType;
     GridDefinitionTemplatePlusList: byte[];
 }
 
@@ -19,6 +28,7 @@ let readGridDefinitionSection (reader:System.IO.BinaryReader) =
     let numberOfOctetsForOptionalListOfNumbersDefiningNumberOfPoints = reader.ReadByte()
     let interpolationOfListOfNumbersDefiningNumberOfPoints = reader.ReadByte()
     let gridDefinitionTemplateNumber = System.BitConverter.ToUInt16(Array.rev(reader.ReadBytes(2)), 0)
+    let gridDefinitionTemplateType = gridDefinitionTemplateTypeFromShort gridDefinitionTemplateNumber
     let gridDefinitionTemplate = reader.ReadBytes((int) (sectionLength - 14u))
 
     {
@@ -28,6 +38,6 @@ let readGridDefinitionSection (reader:System.IO.BinaryReader) =
         NumberOfDataPoints = numberOfDataPoints;
         NumberOfOctetsForOptionalListOfNumbersDefiningNumberOfPoints = numberOfOctetsForOptionalListOfNumbersDefiningNumberOfPoints;
         InterpolationOfListOfNumbersDefiningNumberOfPoints = interpolationOfListOfNumbersDefiningNumberOfPoints;
-        GridDefinitionTemplateNumber = gridDefinitionTemplateNumber;
+        GridDefinitionTemplateType = gridDefinitionTemplateType;
         GridDefinitionTemplatePlusList = gridDefinitionTemplate;
     }
