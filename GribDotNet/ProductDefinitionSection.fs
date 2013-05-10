@@ -19,6 +19,7 @@ let readProductDefinitionSection (reader:System.IO.BinaryReader) =
 
     let productDefinitionTemplate = reader.ReadBytes(productDefinitionTemplateLength)
     let listOfCoordinateValues = reader.ReadBytes((int) numberOfCoordinateValuesAfterTemplate)
+    System.Diagnostics.Debug.WriteLine(sprintf "Product Definition Section Number %d" sectionNumber)
 
     {
         SectionLength = sectionLength;

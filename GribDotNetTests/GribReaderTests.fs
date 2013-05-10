@@ -2,6 +2,8 @@
 
 open GribReader
 
+open GridDefinitionSection
+
 open NUnit.Framework
 open FsUnit
 
@@ -17,3 +19,7 @@ type GribReaderTests() =
     [<Test>]
     member test.IdentificationSection() =
         grib.IdentificationSection.SectionLength |> should equal 21u
+
+    [<Test>]
+    member test.GridDefinitionTemplateType() =
+        grib.GridDefinitionSection.GridDefinitionTemplateType |> should equal LambertConformal

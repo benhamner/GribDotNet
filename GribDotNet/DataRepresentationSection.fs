@@ -14,6 +14,7 @@ let readDataRepresentationSection (reader:System.IO.BinaryReader) =
     let numberOfDataPoints = System.BitConverter.ToUInt32(Array.rev(reader.ReadBytes(4)), 0)
     let dataRepresentationTemplateNumber = System.BitConverter.ToUInt16(Array.rev(reader.ReadBytes(2)), 0)
     let dataRepresentationTemplate = reader.ReadBytes((int) (sectionLength - 11u))
+    System.Diagnostics.Debug.WriteLine(sprintf "Data Representation Section Number %d" sectionNumber)
 
     {
         SectionLength = sectionLength;

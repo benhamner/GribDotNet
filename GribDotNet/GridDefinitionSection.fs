@@ -6,7 +6,7 @@ type GridDefinitionTemplateType =
 
 let gridDefinitionTemplateTypeFromShort (x:uint16) =
     match x with
-    | 0us -> LambertConformal
+    | 30us -> LambertConformal
     | x -> Other x
 
 type GridDefinitionSection = {
@@ -30,6 +30,7 @@ let readGridDefinitionSection (reader:System.IO.BinaryReader) =
     let gridDefinitionTemplateNumber = System.BitConverter.ToUInt16(Array.rev(reader.ReadBytes(2)), 0)
     let gridDefinitionTemplateType = gridDefinitionTemplateTypeFromShort gridDefinitionTemplateNumber
     let gridDefinitionTemplate = reader.ReadBytes((int) (sectionLength - 14u))
+    System.Diagnostics.Debug.WriteLine(sprintf "Grid Definition Section Number: %d" sectionNumber)
 
     {
         SectionLength = sectionLength;

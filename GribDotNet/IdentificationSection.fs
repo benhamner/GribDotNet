@@ -51,6 +51,7 @@ let readIdentificationSection (reader:System.IO.BinaryReader) =
     let productionStatusOfProcessedData = reader.ReadByte()
     let typeOfProcessedData = reader.ReadByte()
     let reserved = reader.ReadBytes((int) (sectionLength-21u))
+    System.Diagnostics.Debug.WriteLine(sprintf "Identification Section Number %d" sectionNumber)
 
     {
         SectionLength = sectionLength;

@@ -46,6 +46,16 @@ let readGrib (reader:System.IO.BinaryReader) =
         EndSection = endSection
     }
 
+let readAllGribs (reader:System.IO.BinaryReader) = 
+    //[while (reader.PeekChar()) <> -1 do yield readGrib reader]
+    let gribs = [for i in 1..112 ->
+        System.Diagnostics.Debug.WriteLine(sprintf "i: %d Char: %d" i (reader.PeekChar()))
+        readGrib reader]
+    //let badGrib = readGrib reader
+    //System.Diagnostics.Debug.WriteLine(sprintf "Data Length: %d Char: %d" badGrib.DataSection.SectionLength (reader.PeekChar()))
+
+    [gribs.[gribs.Length-1]]
+
 let readGribFromPath (path:string) = 
     let reader = (new System.IO.BinaryReader(System.IO.File.OpenRead(path)))
     try

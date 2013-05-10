@@ -59,6 +59,8 @@
     <Compile Include="DataSectionTests.fs" />
     <Compile Include="EndSectionTests.fs" />
     <Compile Include="GribReaderTests.fs" />
+    <Compile Include="SectionTests.fs" />
+    <Compile Include="ReadAllGribTests.fs" />
     <None Include="Script.fsx" />
     <None Include="packages.config" />
     <None Include="app.config" />
