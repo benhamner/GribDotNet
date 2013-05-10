@@ -1,5 +1,23 @@
 ﻿module ProductDefinitionSection
 
+type ProductDefinitionTemplateType0 = {
+    ParameterCategory: byte;
+    ParameterNumber: byte;
+    TypeOfGeneratingProcess: byte;
+    BackgroundGeneratingProcessIdentifier: byte;
+    AnalaysisOrForecastGeneratingProcessIdentified: byte;
+    HoursOfObservationalDataCutoffAfterReferenceTime: uint16;
+    MinutesOfObservationalDataCutoffAfterRefenceTime: byte;
+    IndicatorOfUnitOfTimeRange: byte;
+    ForecastTime: uint32;
+    TypeOfFirstFixedSurface: byte;
+    ScaleFactorOfFirstFixedSurface: byte;
+    ScaledValueOfFirstFixedSurvace: uint32;
+    TypeOfSecondFixedSurface: byte;
+    ScaleFactorOfSecondFixedSurface: byte;
+    ScaledValueOfSecondFixedSurvace: uint32;
+}
+
 type ProductDefinitionSection = {
     SectionLength: uint32;
     NumberOfCoordinateValuesAfterTemplate: uint16;
