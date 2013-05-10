@@ -8,7 +8,6 @@ open ProductDefinitionSection
 open DataRepresentationSection
 open BitMapSection
 open DataSection
-open EndSection
 
 type Section =
  | Indicator of IndicatorSection
@@ -18,37 +17,34 @@ type Section =
  | ProductDefinition of ProductDefinitionSection
  | DataRepresentation of DataRepresentationSection
  | BitMap of BitMapSection
- | End of EndSection
+ | Data of DataSection
+ | End
 
-type Section2 =
- | Indicator of byte[]
- | Section of byte[]
- | End of byte[]
+exception InvalidSectionNumberError of string
 
-let readSection (reader:System.IO.BinaryReader) (i:int) = 
+let readSectionByNumber : System.IO.BinaryReader -> byte -> uint32 -> Section = fun reader sectionNumber sectionLength ->
+    match sectionNumber with
+    | 1uy -> Identification (readIdentificationSection reader sectionLength)
+    | 2uy -> LocalUse (readLocalUseSection reader sectionLength)
+    | 3uy -> GridDefinition (readGridDefinitionSection reader sectionLength)
+    | 4uy -> ProductDefinition (readProductDefinitionSection reader sectionLength)
+    | 5uy -> DataRepresentation (readDataRepresentationSection reader sectionLength)
+    | 6uy -> BitMap (readBitMapSection reader sectionLength)
+    | 7uy -> Data (readDataSection reader sectionLength)
+    | _   -> raise (InvalidSectionNumberError(sprintf "The section number %d is invalid" ((int) sectionNumber)))
+
+let readSection (reader:System.IO.BinaryReader) = 
     let firstFour = reader.ReadBytes(4)
     let sectionLength = System.BitConverter.ToUInt32(Array.rev(firstFour), 0)
     let numBytesToRead = ((int) sectionLength) - 5
-    //System.Diagnostics.Debug.WriteLine(sprintf "Section %d, Position: %d / %d" i reader.BaseStream.Position reader.BaseStream.Length)
-    //System.Diagnostics.Debug.WriteLine(sprintf "Number of Bytes to Read %d" numBytesToRead)
     match firstFour with
-    | "GRIB"B -> 
-        System.Diagnostics.Debug.Write("Start Grib: ")
-        Section2.Indicator (Array.concat [firstFour;(reader.ReadBytes(12))])
-    | "7777"B -> 
-        System.Diagnostics.Debug.WriteLine("End Grib")
-        Section2.End (firstFour)
-    | _ -> 
-        let sectionNumber = reader.ReadBytes(1)
-        System.Diagnostics.Debug.Write(sprintf "%d " ((int) sectionNumber.[0]))
-        Section2.Section (Array.concat [firstFour; sectionNumber; (reader.ReadBytes(numBytesToRead))])
+    | "GRIB"B -> Indicator (readIndicatorSection reader)
+    | "7777"B -> End
+    | _ -> let sectionNumber = reader.ReadByte()
+           readSectionByNumber reader sectionNumber sectionLength
 
 let readAllSections (reader:System.IO.BinaryReader) =
-    let i = ref 0
-    [while reader.BaseStream.Position < reader.BaseStream.Length do 
-        i := !i+1
-        yield readSection reader !i]
-    //[for i in 1 .. 1000 -> readSection reader i]
+    [while reader.BaseStream.Position < reader.BaseStream.Length do yield readSection reader]
 
 let readAllSectionsFromPath (path:string) = 
     let reader = (new System.IO.BinaryReader(System.IO.File.OpenRead(path), System.Text.Encoding.ASCII))

@@ -7,8 +7,8 @@ open FromHex
 open NUnit.Framework
 open FsUnit
 
-let reader = streamFromHex "0000000808090f0f"
-let dataSection = readDataSection reader
+let reader = streamFromHex "090f0f"
+let dataSection = readDataSection reader 8u
 
 [<TestFixture>]
 type DataSectionTests() =
@@ -16,10 +16,6 @@ type DataSectionTests() =
     member test.SectionLength() =
         dataSection.SectionLength |> should equal 8
         
-    [<Test>]
-    member test.SectionNumber() =
-        dataSection.SectionNumber |> should equal 8
-
     [<Test>]
     member test.Data() = 
         dataSection.Data |> should equal [| 9y ; 15y ; 15y |]

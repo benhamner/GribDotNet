@@ -7,15 +7,11 @@ open FromHex
 open NUnit.Framework
 open FsUnit
 
-let reader = streamFromHex "475249420000000200000000000088f8"
+let reader = streamFromHex "0000000200000000000088f8"
 let indicatorSection = readIndicatorSection reader
 
 [<TestFixture>]
 type IndicatorSectionTests() =
-    [<Test>]
-    member test.InitialText() =
-        indicatorSection.InitialText |> should equal "GRIB"B
-
     [<Test>]
     member test.EditionNumber() =
         indicatorSection.EditionNumber |> should equal 2

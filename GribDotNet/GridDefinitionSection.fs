@@ -11,7 +11,6 @@ let gridDefinitionTemplateTypeFromShort (x:uint16) =
 
 type GridDefinitionSection = {
     SectionLength: uint32;
-    SectionNumber: byte;
     SourceOfGridDefinition: byte;
     NumberOfDataPoints: uint32;
     NumberOfOctetsForOptionalListOfNumbersDefiningNumberOfPoints: byte;
@@ -20,9 +19,7 @@ type GridDefinitionSection = {
     GridDefinitionTemplatePlusList: byte[];
 }
 
-let readGridDefinitionSection (reader:System.IO.BinaryReader) =
-    let sectionLength = System.BitConverter.ToUInt32(Array.rev(reader.ReadBytes(4)), 0)
-    let sectionNumber = reader.ReadByte()
+let readGridDefinitionSection (reader:System.IO.BinaryReader) sectionLength =
     let sourceOfGridDefinition = reader.ReadByte()
     let numberOfDataPoints = System.BitConverter.ToUInt32(Array.rev(reader.ReadBytes(4)), 0)
     let numberOfOctetsForOptionalListOfNumbersDefiningNumberOfPoints = reader.ReadByte()
@@ -30,11 +27,9 @@ let readGridDefinitionSection (reader:System.IO.BinaryReader) =
     let gridDefinitionTemplateNumber = System.BitConverter.ToUInt16(Array.rev(reader.ReadBytes(2)), 0)
     let gridDefinitionTemplateType = gridDefinitionTemplateTypeFromShort gridDefinitionTemplateNumber
     let gridDefinitionTemplate = reader.ReadBytes((int) (sectionLength - 14u))
-    System.Diagnostics.Debug.WriteLine(sprintf "Grid Definition Section Number: %d" sectionNumber)
 
     {
         SectionLength = sectionLength;
-        SectionNumber = sectionNumber;
         SourceOfGridDefinition = sourceOfGridDefinition;
         NumberOfDataPoints = numberOfDataPoints;
         NumberOfOctetsForOptionalListOfNumbersDefiningNumberOfPoints = numberOfOctetsForOptionalListOfNumbersDefiningNumberOfPoints;

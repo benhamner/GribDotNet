@@ -7,15 +7,11 @@ open FromHex
 open NUnit.Framework
 open FsUnit
 
-let reader = streamFromHex "00000015010007000002010107dd03111700000001"
-let identificationSection = readIdentificationSection reader
+let reader = streamFromHex "0007000002010107dd03111700000001"
+let identificationSection = readIdentificationSection reader 21u
 
 [<TestFixture>]
 type IdentificationSectionTests() =
-    [<Test>]
-    member test.SectionLength() =
-        identificationSection.SectionLength |> should equal 21
-
     [<Test>]
     member test.SignificanceOfReferenceTime() =
         identificationSection.SignficanceOfReferenceTime |> should equal StartOfForecast

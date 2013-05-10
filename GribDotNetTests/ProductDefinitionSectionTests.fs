@@ -7,19 +7,15 @@ open FromHex
 open NUnit.Framework
 open FsUnit
 
-let reader = streamFromHex "0000000d04000100000a0a0a0f"
-let productDefinitionSection = readProductDefinitionSection reader
+let reader = streamFromHex "000100000a0a0a0f"
+let productDefinitionSection = readProductDefinitionSection reader 13u
 
 [<TestFixture>]
 type ProductDefinitionSectionTests() =
     [<Test>]
     member test.SectionLength() =
         productDefinitionSection.SectionLength |> should equal 13
-        
-    [<Test>]
-    member test.SectionNumber() =
-        productDefinitionSection.SectionNumber |> should equal 4
-        
+
     [<Test>]
     member test.NumberOfCoordinateValuesAfterTemplate() =
         productDefinitionSection.NumberOfCoordinateValuesAfterTemplate |> should equal 1us

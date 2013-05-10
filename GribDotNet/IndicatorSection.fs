@@ -26,7 +26,6 @@ let disciplineFromByte (x:byte) =
     | _ -> Reserved
 
 type IndicatorSection = {
-    InitialText: byte[];
     Reserved: byte[];
     Discipline: Discipline;
     EditionNumber: int
@@ -34,14 +33,11 @@ type IndicatorSection = {
 }
 
 let readIndicatorSection (reader:System.IO.BinaryReader) =
-    let initialText = reader.ReadBytes(4)
     let reserved = reader.ReadBytes(2)
     let discipline = reader.ReadByte()
     let editionNumber = reader.ReadByte()
     let totalMessageLength = System.BitConverter.ToUInt64(Array.rev(reader.ReadBytes(8)), 0)
-    if initialText <> "GRIB"B then raise (GribIndicatorReadError("First 4 bytes not GRIB"))
-    else {
-        InitialText = initialText;
+    {
         Reserved =  reserved;
         Discipline = disciplineFromByte discipline;
         EditionNumber = (int) editionNumber;

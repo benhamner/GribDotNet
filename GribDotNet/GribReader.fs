@@ -8,58 +8,98 @@ open ProductDefinitionSection
 open DataRepresentationSection
 open BitMapSection
 open DataSection
-open EndSection
+open Section
 
-type Grib = {
-    IndicatorSection: IndicatorSection;
-    IdentificationSection: IdentificationSection;
-    LocalUseSection: LocalUseSection;
-    GridDefinitionSection: GridDefinitionSection;
+// Some Grib sets have multiples of Sections 4-7. This type holds these
+type DataProduct = {
     ProductDefinitionSection: ProductDefinitionSection;
     DataRepresentationSection: DataRepresentationSection;
     BitMapSection: BitMapSection;
     DataSection: DataSection;
-    EndSection: EndSection
 }
 
-let readGrib (reader:System.IO.BinaryReader) = 
-    let indicatorSection = readIndicatorSection reader
-    let identificationSection = readIdentificationSection reader
-    // Our test file doesn't use the local use section. Need to find a clean way to handle this
-    let localUseSection = blankLocalUseSection
-    let gridDefinitionSection = readGridDefinitionSection reader
-    let productDefinitionSection = readProductDefinitionSection reader
-    let dataRepresentationSection = readDataRepresentationSection reader
-    let bitMapSection = readBitMapSection reader
-    let dataSection = readDataSection reader
-    let endSection = readEndSection reader
+type Grib = {
+    IndicatorSection: IndicatorSection;
+    IdentificationSection: IdentificationSection;
+    LocalUseSection: LocalUseSection option;
+    GridDefinitionSection: GridDefinitionSection;
+    DataProducts: List<DataProduct>
+}
+
+exception GribReadError of string
+
+let rec readDataProducts (reader:System.IO.BinaryReader) =
+    match readSection reader with
+    | ProductDefinition productDefinitionSection ->
+        let dataRepresentationSection =
+            match readSection reader with
+            | DataRepresentation section -> section
+            | _ -> raise (GribReadError("Expected Data Representation Section"))
+
+        let bitMapSection =
+            match readSection reader with
+            | BitMap section -> section
+            | _ -> raise (GribReadError("Expected Bit Map Section"))
+
+        let dataSection =
+            match readSection reader with
+            | Data section -> section
+            | _ -> raise (GribReadError("Expected Data Section"))
+
+        let productDefinition = {
+            ProductDefinitionSection = productDefinitionSection;
+            DataRepresentationSection = dataRepresentationSection;
+            BitMapSection = bitMapSection;
+            DataSection = dataSection
+        }
+
+        productDefinition :: readDataProducts reader
+    | End -> []
+    | _ -> raise (GribReadError("Expected A Product Definition or End Section"))
+
+let readIndividualGrib (reader:System.IO.BinaryReader) = 
+    let indicatorSection =
+        match readSection reader with
+        | Indicator section -> section
+        | _ -> raise (GribReadError("Expected Indicator Section"))
+
+    let identificationSection =
+        match readSection reader with
+        | Identification section -> section
+        | _ -> raise (GribReadError("Expected Identification Section"))
+
+    let localUseSection, gridDefinitionSection =
+        match readSection reader with
+        | LocalUse localUseSection ->
+            match readSection reader with
+            | GridDefinition gridDefinitionSection -> Some localUseSection, gridDefinitionSection
+            | _ -> raise (GribReadError("Expected Grid Definition Section"))
+        | GridDefinition section -> None, section
+        | _ -> raise (GribReadError("Expected Local Use or Grid Definition Sections"))
+
+    let dataProducts = readDataProducts reader
 
     {
         IndicatorSection = indicatorSection
         IdentificationSection = identificationSection
         LocalUseSection = localUseSection
         GridDefinitionSection = gridDefinitionSection
-        ProductDefinitionSection = productDefinitionSection
-        DataRepresentationSection = dataRepresentationSection
-        BitMapSection = bitMapSection
-        DataSection = dataSection
-        EndSection = endSection
+        DataProducts = dataProducts
     }
 
-let readAllGribs (reader:System.IO.BinaryReader) = 
-    //[while (reader.PeekChar()) <> -1 do yield readGrib reader]
-    let gribs = [for i in 1..112 ->
-        System.Diagnostics.Debug.WriteLine(sprintf "i: %d Char: %d" i (reader.PeekChar()))
-        readGrib reader]
-    //let badGrib = readGrib reader
-    //System.Diagnostics.Debug.WriteLine(sprintf "Data Length: %d Char: %d" badGrib.DataSection.SectionLength (reader.PeekChar()))
+let readGribs (reader:System.IO.BinaryReader) = 
+    [while reader.BaseStream.Position < reader.BaseStream.Length do yield readIndividualGrib reader]
 
-    [gribs.[gribs.Length-1]]
-
-let readGribFromPath (path:string) = 
+let readGribsFromPath (path:string) = 
     let reader = (new System.IO.BinaryReader(System.IO.File.OpenRead(path)))
     try
-        let grib = readGrib reader
-        grib
+        readGribs reader
+    finally
+        reader.Close()
+
+let readIndividualGribFromPath (path:string) = 
+    let reader = (new System.IO.BinaryReader(System.IO.File.OpenRead(path)))
+    try
+        readIndividualGrib reader
     finally
         reader.Close()

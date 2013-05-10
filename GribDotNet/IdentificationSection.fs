@@ -21,7 +21,6 @@ let signficanceOfReferenceTimeFromByte (x:byte) =
 
 type IdentificationSection = {
     SectionLength: uint32;
-    SectionNumber: byte;
     OriginatingCenter: uint16;
     OriginatingSubcenter: uint16;
     MasterTablesVersionNumber: byte;
@@ -33,9 +32,7 @@ type IdentificationSection = {
     Reserved: byte[]
 }
 
-let readIdentificationSection (reader:System.IO.BinaryReader) =
-    let sectionLength = System.BitConverter.ToUInt32(Array.rev(reader.ReadBytes(4)), 0)
-    let sectionNumber = reader.ReadByte()
+let readIdentificationSection (reader:System.IO.BinaryReader) sectionLength =
     let originatingCenter = System.BitConverter.ToUInt16(Array.rev(reader.ReadBytes(2)), 0)
     let originatingSubcenter = System.BitConverter.ToUInt16(Array.rev(reader.ReadBytes(2)), 0)
     let masterTablesVersionNumber = reader.ReadByte()
@@ -51,11 +48,9 @@ let readIdentificationSection (reader:System.IO.BinaryReader) =
     let productionStatusOfProcessedData = reader.ReadByte()
     let typeOfProcessedData = reader.ReadByte()
     let reserved = reader.ReadBytes((int) (sectionLength-21u))
-    System.Diagnostics.Debug.WriteLine(sprintf "Identification Section Number %d" sectionNumber)
 
     {
         SectionLength = sectionLength;
-        SectionNumber = sectionNumber;
         OriginatingCenter = originatingCenter;
         OriginatingSubcenter = originatingSubcenter;
         MasterTablesVersionNumber = masterTablesVersionNumber;

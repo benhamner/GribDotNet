@@ -49,7 +49,6 @@
     <Compile Include="DataRepresentationSection.fs" />
     <Compile Include="BitMapSection.fs" />
     <Compile Include="DataSection.fs" />
-    <Compile Include="EndSection.fs" />
     <Compile Include="Section.fs" />
     <Compile Include="GribReader.fs" />
     <None Include="Script.fsx" />

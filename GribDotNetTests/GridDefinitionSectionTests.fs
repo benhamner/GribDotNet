@@ -7,19 +7,11 @@ open FromHex
 open NUnit.Framework
 open FsUnit
 
-let reader = streamFromHex "0000001105080000000900000001020304"
-let gridDefinitionSection = readGridDefinitionSection reader
+let reader = streamFromHex "080000000900000001020304"
+let gridDefinitionSection = readGridDefinitionSection reader 17u
 
 [<TestFixture>]
 type GridDefinitionSectionTests() =
-    [<Test>]
-    member test.SectionLength() =
-        gridDefinitionSection.SectionLength |> should equal 17
-        
-    [<Test>]
-    member test.SectionNumber() =
-        gridDefinitionSection.SectionNumber |> should equal 5
-        
     [<Test>]
     member test.SourceOfGridDefinition() =
         gridDefinitionSection.SourceOfGridDefinition |> should equal 0x08
