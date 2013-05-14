@@ -1,8 +1,8 @@
 ﻿module GridDefinitionSection
 
 type GridDefinitionTemplateType =
-   | LambertConformal
-   | Other of uint16
+    | LambertConformal
+    | Other of uint16
 
 let gridDefinitionTemplateTypeFromShort (x:uint16) =
     match x with

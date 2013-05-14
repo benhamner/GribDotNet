@@ -22,18 +22,18 @@ type Section =
 
 exception InvalidSectionNumberError of string
 
-let readSectionByNumber : System.IO.BinaryReader -> byte -> uint32 -> Section = fun reader sectionNumber sectionLength ->
+let readSectionByNumber : System.IO.BinaryReader -> byte -> uint32 -> Discipline -> Section = fun reader sectionNumber sectionLength discipline ->
     match sectionNumber with
     | 1uy -> Identification (readIdentificationSection reader sectionLength)
     | 2uy -> LocalUse (readLocalUseSection reader sectionLength)
     | 3uy -> GridDefinition (readGridDefinitionSection reader sectionLength)
-    | 4uy -> ProductDefinition (readProductDefinitionSection reader sectionLength)
+    | 4uy -> ProductDefinition (readProductDefinitionSection reader sectionLength discipline)
     | 5uy -> DataRepresentation (readDataRepresentationSection reader sectionLength)
     | 6uy -> BitMap (readBitMapSection reader sectionLength)
     | 7uy -> Data (readDataSection reader sectionLength)
     | _   -> raise (InvalidSectionNumberError(sprintf "The section number %d is invalid" ((int) sectionNumber)))
 
-let readSection (reader:System.IO.BinaryReader) = 
+let readSection (reader:System.IO.BinaryReader) discipline = 
     let firstFour = reader.ReadBytes(4)
     let sectionLength = System.BitConverter.ToUInt32(Array.rev(firstFour), 0)
     let numBytesToRead = ((int) sectionLength) - 5
@@ -41,10 +41,10 @@ let readSection (reader:System.IO.BinaryReader) =
     | "GRIB"B -> Indicator (readIndicatorSection reader)
     | "7777"B -> End
     | _ -> let sectionNumber = reader.ReadByte()
-           readSectionByNumber reader sectionNumber sectionLength
+           readSectionByNumber reader sectionNumber sectionLength discipline
 
 let readAllSections (reader:System.IO.BinaryReader) =
-    [while reader.BaseStream.Position < reader.BaseStream.Length do yield readSection reader]
+    [while reader.BaseStream.Position < reader.BaseStream.Length do yield readSection reader Discipline.Unknown]
 
 let readAllSectionsFromPath (path:string) = 
     let reader = (new System.IO.BinaryReader(System.IO.File.OpenRead(path), System.Text.Encoding.ASCII))

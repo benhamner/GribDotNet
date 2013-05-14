@@ -12,6 +12,7 @@ type Discipline =
    | Oceanographic
    | ReservedForLocalUse
    | Missing
+   | Unknown
 
 let disciplineFromByte (x:byte) =
     match x with

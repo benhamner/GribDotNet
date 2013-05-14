@@ -57,9 +57,8 @@
     <Compile Include="DataRepresentationSectionTests.fs" />
     <Compile Include="BitMapSectionTests.fs" />
     <Compile Include="DataSectionTests.fs" />
-    <Compile Include="GribReaderTests.fs" />
     <Compile Include="SectionTests.fs" />
-    <Compile Include="ReadAllGribTests.fs" />
+    <Compile Include="GribReaderTests.fs" />
     <None Include="Script.fsx" />
     <None Include="packages.config" />
     <None Include="app.config" />
