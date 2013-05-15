@@ -2,6 +2,47 @@
 
 open IndicatorSection
 
+type FixedSurfaceType =
+    | GroundOrWaterSurface
+    | CloudBaseLevel
+    | LevelOfCloudTops
+    | LevelOfZeroDegreeCelsiusIsotherm
+    | LevelOfAdiabaticCodensationLiftedFromTheSurface
+    | MaximumWindLevel
+    | Tropopause
+    | IsobaricSurface
+    | MeanSeaLevel
+    | SpecificAltitudeAboveMeanSeaLevel
+    | SpecificHeightLevelAboveGround
+    | LevelAtSpecifiedPressureDifferenceFromGroundToLevel
+    | EntireAtmosphere
+    | HighestTroposphericFreezingLevel
+    | ConvectiveCloudTopLevel
+    | LowestLevelOfTheWetBulbZero
+    | EquilibriumLevel
+    | Other of byte
+
+let toFixedSurfaceType byte =
+    match byte with
+    | 1uy   -> GroundOrWaterSurface
+    | 2uy   -> CloudBaseLevel
+    | 3uy   -> LevelOfCloudTops
+    | 4uy   -> LevelOfZeroDegreeCelsiusIsotherm
+    | 5uy   -> LevelOfAdiabaticCodensationLiftedFromTheSurface
+    | 6uy   -> MaximumWindLevel
+    | 7uy   -> Tropopause
+    | 100uy -> IsobaricSurface
+    | 101uy -> MeanSeaLevel
+    | 102uy -> SpecificAltitudeAboveMeanSeaLevel
+    | 103uy -> SpecificHeightLevelAboveGround
+    | 108uy -> LevelAtSpecifiedPressureDifferenceFromGroundToLevel
+    | 200uy -> EntireAtmosphere
+    | 204uy -> HighestTroposphericFreezingLevel
+    | 243uy -> ConvectiveCloudTopLevel
+    | 245uy -> LowestLevelOfTheWetBulbZero
+    | 247uy -> EquilibriumLevel
+    | _     -> Other byte
+
 type ProductCategory = 
     | Temperature
     | Moisture
@@ -74,10 +115,10 @@ type ProductDefinitionTemplateType0 = {
     MinutesOfObservationalDataCutoffAfterRefenceTime: byte;
     IndicatorOfUnitOfTimeRange: byte;
     ForecastTime: uint32;
-    TypeOfFirstFixedSurface: byte;
+    TypeOfFirstFixedSurface: FixedSurfaceType;
     ScaleFactorOfFirstFixedSurface: byte;
     ScaledValueOfFirstFixedSurvace: uint32;
-    TypeOfSecondFixedSurface: byte;
+    TypeOfSecondFixedSurface: FixedSurfaceType;
     ScaleFactorOfSecondFixedSurface: byte;
     ScaledValueOfSecondFixedSurvace: uint32;
 }
@@ -99,10 +140,10 @@ let readProductDefinitionTemplateType0 (reader:System.IO.BinaryReader) disciplin
         MinutesOfObservationalDataCutoffAfterRefenceTime = reader.ReadByte();
         IndicatorOfUnitOfTimeRange = reader.ReadByte();
         ForecastTime = System.BitConverter.ToUInt32(Array.rev(reader.ReadBytes(4)), 0);
-        TypeOfFirstFixedSurface = reader.ReadByte();
+        TypeOfFirstFixedSurface = toFixedSurfaceType (reader.ReadByte());
         ScaleFactorOfFirstFixedSurface = reader.ReadByte();
         ScaledValueOfFirstFixedSurvace = System.BitConverter.ToUInt32(Array.rev(reader.ReadBytes(4)), 0);
-        TypeOfSecondFixedSurface = reader.ReadByte();
+        TypeOfSecondFixedSurface = toFixedSurfaceType (reader.ReadByte());
         ScaleFactorOfSecondFixedSurface = reader.ReadByte();
         ScaledValueOfSecondFixedSurvace = System.BitConverter.ToUInt32(Array.rev(reader.ReadBytes(4)), 0);
     }

@@ -12,6 +12,11 @@ let path = __SOURCE_DIRECTORY__ + "\\testData\\rap_130_20130318_2300_018.grb2"
 let gribRecord = readGribRecordFromPath path
 let grib = readGribFromPath path
 
+let isLambertConformal template =
+    match template with
+    | LambertConformal _ -> true
+    | _ -> false
+
 [<TestFixture>]
 type GribReaderTests() =
     [<Test>]
@@ -19,8 +24,12 @@ type GribReaderTests() =
         gribRecord.IdentificationSection.SectionLength |> should equal 21u
         
     [<Test>]
+    member test.GridDefinitionTemplateTypeSingleRecord() =
+        isLambertConformal gribRecord.GridDefinitionSection.GridDefinitionTemplate |> should be True
+        
+    [<Test>]
     member test.GridDefinitionTemplateType() =
-        gribRecord.GridDefinitionSection.GridDefinitionTemplateType |> should equal LambertConformal
+        Set.ofList [for g in grib -> isLambertConformal g.GridDefinitionSection.GridDefinitionTemplate] |> should equal (Set.ofList [true])
 
     [<Test>]
     member test.GribsTest() =
@@ -42,5 +51,3 @@ type GribReaderTests() =
         productCounts.TryFind (ProductCategory.Momentum, Product.VerticalVelocityPressure) |> should equal (Some 43)
         productCounts.TryFind (ProductCategory.Mass, Product.Pressure) |> should equal (Some 5)
         productCounts.TryFind (ProductCategory.Temperature, Product.PotentialTemperature) |> should equal (Some 2)
-
-        //productCounts |> Seq.exists (fun x -> x = ((ProductCategory.Temperature, Product.Temperature), 46)) |> should be True

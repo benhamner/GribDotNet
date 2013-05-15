@@ -27,11 +27,7 @@ type GridDefinitionSectionTests() =
     [<Test>]
     member test.InterpolationOfListOfNumbersDefiningNumberOfPoints() =
         gridDefinitionSection.InterpolationOfListOfNumbersDefiningNumberOfPoints |> should equal 0us
-
+ 
     [<Test>]
-    member test.GridDefinitionTemplateNumber() =
-        gridDefinitionSection.GridDefinitionTemplateType |> should equal (Other 1us)
-        
-    [<Test>]
-    member test.GridDefinitionTemplatePlusList() =
-        gridDefinitionSection.GridDefinitionTemplatePlusList |> should equal [|0x02; 0x03; 0x04|]
+    member test.GridDefinitionTemplate() =
+        gridDefinitionSection.GridDefinitionTemplate |> should equal (Other (1us, [|02uy; 03uy; 04uy|]))

@@ -32,3 +32,4 @@ type ProductDefinitionSectionTests() =
     [<Test>]
     member test.ListOfCoordinateValues() = 
         productDefinitionSection.ListOfCoordinateValues |> should equal [| 15y |]
+
