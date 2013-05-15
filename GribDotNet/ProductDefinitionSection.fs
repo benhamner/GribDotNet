@@ -70,6 +70,7 @@ let toProductCategory discipline byte =
 type Product = 
     | Temperature
     | PotentialTemperature
+    | SpecificHumidity
     | RelativeHumidity
     | UComponentOfWind
     | VComponentOfWind
@@ -89,6 +90,7 @@ let toProduct : Discipline -> ProductCategory -> byte -> Product = fun disciplin
             | _ -> Other parameterNumber
         | ProductCategory.Moisture ->
             match parameterNumber with
+            | 0uy  -> SpecificHumidity
             | 1uy -> RelativeHumidity
             | _ -> Other parameterNumber
         | Momentum -> 

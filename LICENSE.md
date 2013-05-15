@@ -3,7 +3,7 @@ GribDotNet is distributed under a Simplified BSD License.
 GribDotNet License
 ==================
 
-Copyright (c) 2013, Ben Hamner
+Copyright (c) 2013, Kaggle
 
 Author: Ben Hamner (ben@benhamner.com)
 
