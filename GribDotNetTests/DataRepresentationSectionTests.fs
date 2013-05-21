@@ -26,4 +26,4 @@ type DataRepresentationSectionTests() =
 
     [<Test>]
     member test.DataRepresentationTemplate() = 
-        dataRepresentationSection.DataRepresentationTemplate |> should equal [| 15y ; 15y |]
+        dataRepresentationSection.DataRepresentationTemplate |> should equal (Other (1us, [| 15uy ; 15uy |]))
