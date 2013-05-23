@@ -32,6 +32,9 @@
     <DocumentationFile>bin\Release\GribDotNetTests.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CSJ2K">
+      <HintPath>..\Libraries\CSJ2K.dll</HintPath>
+    </Reference>
     <Reference Include="FsUnit.NUnit">
       <HintPath>..\packages\FsUnit.1.2.1.0\lib\Net40\FsUnit.NUnit.dll</HintPath>
       <Private>True</Private>
@@ -45,6 +48,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
@@ -59,6 +63,7 @@
     <Compile Include="DataSectionTests.fs" />
     <Compile Include="SectionTests.fs" />
     <Compile Include="GribReaderTests.fs" />
+    <Compile Include="JpegDecoderTests.fs" />
     <None Include="Script.fsx" />
     <None Include="packages.config" />
     <None Include="app.config" />

@@ -32,12 +32,16 @@
     <DocumentationFile>bin\Release\GribDotNet.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CSJ2K">
+      <HintPath>..\Libraries\CSJ2K.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
@@ -48,6 +52,7 @@
     <Compile Include="ProductDefinitionSection.fs" />
     <Compile Include="DataRepresentationSection.fs" />
     <Compile Include="BitMapSection.fs" />
+    <Compile Include="JpegDecoder.fs" />
     <Compile Include="DataSection.fs" />
     <Compile Include="Section.fs" />
     <Compile Include="GribReader.fs" />

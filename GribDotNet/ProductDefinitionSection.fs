@@ -72,6 +72,8 @@ type Product =
     | PotentialTemperature
     | SpecificHumidity
     | RelativeHumidity
+    | WindDirection
+    | WindSpeed
     | UComponentOfWind
     | VComponentOfWind
     | VerticalVelocityPressure
@@ -95,6 +97,8 @@ let toProduct : Discipline -> ProductCategory -> byte -> Product = fun disciplin
             | _ -> Other parameterNumber
         | Momentum -> 
             match parameterNumber with
+            | 0uy -> WindDirection
+            | 1uy -> WindSpeed
             | 2uy -> UComponentOfWind
             | 3uy -> VComponentOfWind
             | 8uy -> VerticalVelocityPressure
@@ -128,6 +132,16 @@ type ProductDefinitionTemplateType0 = {
 type ProductDefinitionTemplate =
     | Type0 of ProductDefinitionTemplateType0
     | Other of byte[]
+
+type ProductDefinitionTemplate with
+    member this.IsTypeZero =
+        match this with
+        | Type0 _ -> true
+        | _ -> false
+    member this.GetTypeZero() = 
+        match this with
+        | Type0 t -> Some(t)
+        | _ -> None
 
 let readProductDefinitionTemplateType0 (reader:System.IO.BinaryReader) discipline =
     let parameterCategory = toProductCategory discipline (reader.ReadByte())

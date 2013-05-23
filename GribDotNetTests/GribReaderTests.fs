@@ -1,7 +1,6 @@
 ﻿module GribReaderTests
 
 open GribReader
-
 open GridDefinitionSection
 open ProductDefinitionSection
 
@@ -28,7 +27,7 @@ type GribReaderTests() =
     member test.IdentificationSection() =
         gribRecord1.IdentificationSection.SectionLength |> should equal 21u
         gribRecord2.IdentificationSection.SectionLength |> should equal 21u
-        
+
     [<Test>]
     member test.GridDefinitionTemplateTypeSingleRecord() =
         isLambertConformal gribRecord1.GridDefinitionSection.GridDefinitionTemplate |> should be True

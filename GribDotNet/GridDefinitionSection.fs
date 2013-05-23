@@ -29,6 +29,11 @@ type GridDefinitionTemplate =
     | LambertConformal of LambertConformalTemplate
     | Other of uint16 * byte[]
 
+let asLambertComformalTemplate gridTemplate =
+    match gridTemplate with
+    | LambertConformal x -> x
+    | _ -> failwith "Not Lambert Conformal Template!"
+
 let readLambertConformalTemplate (reader:System.IO.BinaryReader) = {
     ShapeOfEarth = reader.ReadByte();
     ScaleFactorOfRadiusOfSphericalEarth = reader.ReadByte();
