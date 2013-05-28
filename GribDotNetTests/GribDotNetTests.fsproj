@@ -67,6 +67,8 @@
     <None Include="Script.fsx" />
     <None Include="packages.config" />
     <None Include="app.config" />
+    <Compile Include="GridDecoderTests.fs" />
+    <Compile Include="LambertConverterTests.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GribDotNet\GribDotNet.fsproj">

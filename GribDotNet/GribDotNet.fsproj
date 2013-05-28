@@ -45,6 +45,7 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ParsingUtilities.fs" />
     <Compile Include="IndicatorSection.fs" />
     <Compile Include="IdentificationSection.fs" />
     <Compile Include="LocalUseSection.fs" />
@@ -59,6 +60,7 @@
     <None Include="Script.fsx" />
     <None Include="packages.config" />
     <None Include="app.config" />
+    <Compile Include="LambertConverter.fs" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
