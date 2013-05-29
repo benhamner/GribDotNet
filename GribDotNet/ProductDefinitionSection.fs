@@ -20,6 +20,7 @@ type FixedSurfaceType =
     | ConvectiveCloudTopLevel
     | LowestLevelOfTheWetBulbZero
     | EquilibriumLevel
+    | HybridLevel
     | Other of byte
 
 let toFixedSurfaceType byte =
@@ -35,6 +36,7 @@ let toFixedSurfaceType byte =
     | 101uy -> MeanSeaLevel
     | 102uy -> SpecificAltitudeAboveMeanSeaLevel
     | 103uy -> SpecificHeightLevelAboveGround
+    | 105uy -> HybridLevel
     | 108uy -> LevelAtSpecifiedPressureDifferenceFromGroundToLevel
     | 200uy -> EntireAtmosphere
     | 204uy -> HighestTroposphericFreezingLevel
