@@ -5,8 +5,6 @@
 
 type LambertProjection1 = {
     StandardParallel0 : float<Latitude>
-    OriginLatitude: float<Latitude>
-    OriginLongitude: float<Longitude>
     ReferenceLatitude : float<Latitude>
     ReferenceLongitude : float<Longitude>
     EarthRadius : float
@@ -16,8 +14,6 @@ type LambertProjection1 = {
 type LambertProjection2 = {
     StandardParallel1 : float<Latitude>
     StandardParallel2 : float<Latitude>
-    OriginLatitude: float<Latitude>
-    OriginLongitude: float<Longitude>
     ReferenceLatitude : float<Latitude>
     ReferenceLongitude : float<Longitude>
     EarthRadius : float

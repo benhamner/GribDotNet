@@ -21,6 +21,7 @@ type GridDecoderTests() =
     let expectedStartLatitude = 16281000u
     let expectedStartLongitude = 233862000u
     let expectedShape = 6u
+    let expectedScanning = 64uy // Increasing x and y, rows adjacent
     let expectedDistanceDelta = 13545000u
     let expectedStandardParallel = 25000000u
     [<Test>]
@@ -32,6 +33,7 @@ type GridDecoderTests() =
                 targetGrib
         printf "Count: %d\n" (List.length lamberts)
         let shapes = lamberts |> List.map (fun x -> x.ShapeOfEarth)
+        let scanning = lamberts |> List.map (fun x -> x.ScanningMode)
         let nxs = lamberts |> List.map (fun x -> x.NumberOfPointsOnXAxis)
         let nys = lamberts |> List.map (fun x -> x.NumberOfPointsOnYAxis)
         let lats = lamberts |> (List.map (fun x -> x.LatitudeOfFirstGridPoint))
@@ -40,9 +42,12 @@ type GridDecoderTests() =
         let dys = lamberts |> (List.map (fun x -> x.YDirectionGridLength))
         let standardParallels1 = lamberts |> (List.map (fun x -> x.FirstLatitudeFromThePoleAtWhichTheSecantConeCutsTheSphere))
         let standardParallels2 = lamberts |> (List.map (fun x -> x.SecondLatitudeFromThePoleAtWhichTheSecantConeCutsTheSphere))
+        let referenceLatitude = lamberts |> (List.map (fun x -> x.LatitudeWhereDxAndDyAreSpecified))
+        let referenceLongitude = lamberts |> (List.map (fun x -> x.LongitudeOfMeridianParallelToYAxisAlongWhichLatitudeIncreasesAsTheYCoordinateIncreases))
         if verbose then
             let floatMean xs = xs |> List.averageBy (fun x-> float x)
             printf "Earth shape: %f\n" (floatMean shapes)
+            printf "Scanning: %f\n" (floatMean scanning)
             printf "X points: %f\n" (nxs|>List.averageBy (fun x -> float x))
             printf "Y points: %f\n" (nys|>List.averageBy (fun x -> float x))
             printf "Latitude: %f\n" (lats|>List.averageBy (fun x -> float x * 1e-6))
@@ -51,8 +56,12 @@ type GridDecoderTests() =
             printf "dys: %f\n" (dys|>List.averageBy (fun x -> float x * 1e-3))
             printf "Standard Parallel 1: %f\n" (standardParallels1|>List.averageBy (fun x -> float x * 1e-6))
             printf "Standard Parallel 2: %f\n" (standardParallels2|>List.averageBy (fun x -> float x * 1e-6))
+            printf "Ref Latitude: %f\n" (referenceLatitude|>List.averageBy (fun x -> float x * 1e-6))
+            printf "Ref Longtitude: %f\n" (referenceLongitude|>List.averageBy (fun x -> float x * 1e-6))
         List.max shapes |> should equal expectedShape
         List.min shapes |> should equal expectedShape
+        List.max scanning |> should equal expectedScanning
+        List.min scanning |> should equal expectedScanning
         List.max nxs |> should equal expectedXPoints
         List.min nxs |> should equal expectedXPoints
         List.max nys |> should equal expectedYPoints
@@ -67,3 +76,28 @@ type GridDecoderTests() =
         List.max standardParallels1 |> should equal expectedStandardParallel
         List.min standardParallels2 |> should equal expectedStandardParallel
         List.max standardParallels2 |> should equal expectedStandardParallel
+
+    [<Test>]
+    member test.``Decode grid locations`` () =
+        let targetGrib = grib1
+        let lamberts =
+            List.map
+                (fun x->x.GridDefinitionSection.GridDefinitionTemplate |> GridDefinitionSection.asLambertComformalTemplate)
+                targetGrib
+        printf "Count: %d\n" (List.length lamberts)
+        let single = GridDefinitionSection.decodeLatitudeLongitude (List.head lamberts)
+        let printIt (lat, long) = printf "%f, %f\n" (float lat) (float long |> fun x -> if x > 180.0 then x-360.0 else x)
+        printIt single.[0].[0]
+        printIt single.[0].[450]
+        printIt single.[336].[0]
+        printIt single.[336].[450]
+        let checkRow row =
+            let latitudes = Array.map (fst >> float) row
+            let maximumLatitude = Array.max latitudes
+            let minimumLatitude = Array.min latitudes
+            maximumLatitude-minimumLatitude |> should lessThanOrEqualTo 5.0 // Latitudes should be similar
+            let longitudes = Array.map (snd >> float) row
+            let lastLongitude = longitudes.[Array.length longitudes - 1]
+            let maximumLongitude = Array.max longitudes
+            maximumLongitude |> should lessThanOrEqualTo lastLongitude // Longitudes should be increasing
+        Array.iteri (fun i r -> checkRow r) single
