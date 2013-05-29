@@ -38,6 +38,8 @@ let decodeLatitudeLongitude (template:LambertConformalTemplate) =
         failwith "Unexpected Earth shape used!" // Would require further decoding
     if template.ScanningMode <> 64uy then
         failwith "Unexpected scanning mode used!" // Would require algorithmic changes
+    if template.ResolutionAndComponentFlags <> 8uy then
+        failwith "Unexpected resolution/component flags used!" // Would require algorithmic changes
     let height = int template.NumberOfPointsOnYAxis
     let width = int template.NumberOfPointsOnXAxis
     let result = Array.init height (fun _ -> Array.create width (0.0<Latitude>, 0.0<Longitude>)) // height x width jagged array

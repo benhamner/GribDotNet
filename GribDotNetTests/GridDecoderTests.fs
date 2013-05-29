@@ -22,6 +22,7 @@ type GridDecoderTests() =
     let expectedStartLongitude = 233862000u
     let expectedShape = 6u
     let expectedScanning = 64uy // Increasing x and y, rows adjacent
+    let expectedComponents = 8uy // U and V along grid
     let expectedDistanceDelta = 13545000u
     let expectedStandardParallel = 25000000u
     [<Test>]
@@ -34,6 +35,7 @@ type GridDecoderTests() =
         printf "Count: %d\n" (List.length lamberts)
         let shapes = lamberts |> List.map (fun x -> x.ShapeOfEarth)
         let scanning = lamberts |> List.map (fun x -> x.ScanningMode)
+        let components = lamberts |> List.map (fun x -> x.ResolutionAndComponentFlags)
         let nxs = lamberts |> List.map (fun x -> x.NumberOfPointsOnXAxis)
         let nys = lamberts |> List.map (fun x -> x.NumberOfPointsOnYAxis)
         let lats = lamberts |> (List.map (fun x -> x.LatitudeOfFirstGridPoint))
@@ -48,6 +50,7 @@ type GridDecoderTests() =
             let floatMean xs = xs |> List.averageBy (fun x-> float x)
             printf "Earth shape: %f\n" (floatMean shapes)
             printf "Scanning: %f\n" (floatMean scanning)
+            printf "Components: %f\n" (floatMean components)
             printf "X points: %f\n" (nxs|>List.averageBy (fun x -> float x))
             printf "Y points: %f\n" (nys|>List.averageBy (fun x -> float x))
             printf "Latitude: %f\n" (lats|>List.averageBy (fun x -> float x * 1e-6))
@@ -62,6 +65,8 @@ type GridDecoderTests() =
         List.min shapes |> should equal expectedShape
         List.max scanning |> should equal expectedScanning
         List.min scanning |> should equal expectedScanning
+        List.max components |> should equal expectedComponents
+        List.min components |> should equal expectedComponents
         List.max nxs |> should equal expectedXPoints
         List.min nxs |> should equal expectedXPoints
         List.max nys |> should equal expectedYPoints
