@@ -9,7 +9,7 @@
 open ProductDefinitionSection
 open GribReader
 
-let path = __SOURCE_DIRECTORY__ + "\\testData\\rap_130_20130318_2300_018.grb2"
+let path = __SOURCE_DIRECTORY__ + "\\testData\\13051215.rap.t15z.awp130bgrbf00.grib2"
 let grib = readGribFromPath path
 
 let disciplines = Set.ofList [for g in grib -> g.IndicatorSection.Discipline]
