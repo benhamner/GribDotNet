@@ -16,6 +16,11 @@ type DataRepresentationTemplate =
     | Template5_40 of DataRepresentationTemplate5_40
     | Other of uint16 * byte[]
 
+let isTemplate5_40 dataRepresentationTemplate =
+    match dataRepresentationTemplate with
+    | Template5_40 _ -> true
+    | _ -> false
+
 let asTemplate5_40 dataRepresentationTemplate =
     match dataRepresentationTemplate with
     | Template5_40 x -> x

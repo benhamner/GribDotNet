@@ -58,6 +58,7 @@
     <Compile Include="DataSection.fs" />
     <Compile Include="Section.fs" />
     <Compile Include="GribReader.fs" />
+    <Compile Include="VerticalCoordinateDecoder.fs" />
     <None Include="Script.fsx" />
     <None Include="packages.config" />
     <None Include="app.config" />

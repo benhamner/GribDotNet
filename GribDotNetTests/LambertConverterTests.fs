@@ -1159,3 +1159,38 @@ type LambertConverterTests() =
                 else
                     (6000.0, 0.08)
             checkLambert1 projection dTolerance aTolerance entry
+
+    [<Test>]
+    member test.``Positive negative longitudes``() =
+        let projection = defaultProjection1
+        let latitude = 25.0
+        let longitudes = [25.0;50.0;80.0;90.0;120.0; 180.0;230.0;270.0;290.0;320.0;-100.0;-90.0;-40.0;-20.0]
+        for longitude in longitudes do
+            let (trialEasting0, trialNorthing0) = LambertConverter.toLambert1 projection (latitude*1.0<Latitude>, longitude*1.0<Longitude>)
+            let (trialEasting1, trialNorthing1) = LambertConverter.toLambert1 projection (latitude*1.0<Latitude>, (longitude-360.0)*1.0<Longitude>)
+            trialEasting0 |> should (equalWithin Precision) trialEasting1
+            trialNorthing0 |> should (equalWithin Precision) trialNorthing1
+
+    [<Test>]
+    member test.``Flight position within grid``() =
+        let latitude0 = 16.281<Latitude>
+        let longitude0 = 233.862<Longitude>
+        let latitude1 = 38.52000046<Latitude>
+        let longitude1 = (360.0-112.8700027)*1.0<Longitude>
+        let projection = {
+            StandardParallel0 = 25.0<Latitude>
+            ReferenceLatitude = 25.0<Latitude>
+            ReferenceLongitude = 265.0<Longitude>
+            EarthRadius = 6371229.0 * 0.000539957
+        }
+        let (easting0, northing0) = LambertConverter.toLambert1 projection (latitude0, longitude0)
+        let (easting1, northing1) = LambertConverter.toLambert1 projection (latitude1, longitude1)
+        printfn "Origin: (%f, %f) -> (%f, %f)" (float latitude0) (float longitude0) (float easting0) (float northing0)
+        printfn "Flight: (%f, %f) -> (%f, %f)" (float latitude1) (float longitude1) (float easting1) (float northing1)
+        let xPoints = 450.0 // Points right of the origin
+        let yPoints = 336.0 // Points above the origin
+        let gridUnitNm = 13545.0 * 0.000539957
+        easting1 |> should greaterThan easting0
+        northing1 |> should greaterThan northing0
+        easting1 |> should lessThan (easting0+gridUnitNm*xPoints)
+        northing1 |> should lessThan (northing0+gridUnitNm*yPoints)

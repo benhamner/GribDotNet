@@ -27,7 +27,7 @@ type LambertConformalTemplate = {
     LongitudeOfSouthernPoleOfProjection: uint32;
 }
 
-let decodeLatitudeLongitude (template:LambertConformalTemplate) =
+let makeLambertProjection1 (template:LambertConformalTemplate) =
     if template.FirstLatitudeFromThePoleAtWhichTheSecantConeCutsTheSphere <>
         template.SecondLatitudeFromThePoleAtWhichTheSecantConeCutsTheSphere then
         failwith "Not single reference parallel template!" // Call the secant decoder instead
@@ -40,19 +40,36 @@ let decodeLatitudeLongitude (template:LambertConformalTemplate) =
         failwith "Unexpected scanning mode used!" // Would require algorithmic changes
     if template.ResolutionAndComponentFlags <> 8uy then
         failwith "Unexpected resolution/component flags used!" // Would require algorithmic changes
-    let height = int template.NumberOfPointsOnYAxis
-    let width = int template.NumberOfPointsOnXAxis
-    let result = Array.init height (fun _ -> Array.create width (0.0<Latitude>, 0.0<Longitude>)) // height x width jagged array
     let projection = {
         StandardParallel0 = float template.FirstLatitudeFromThePoleAtWhichTheSecantConeCutsTheSphere * 1e-6<Latitude>
         ReferenceLatitude = float template.LatitudeWhereDxAndDyAreSpecified * 1e-6<Latitude>
         ReferenceLongitude = float template.LongitudeOfMeridianParallelToYAxisAlongWhichLatitudeIncreasesAsTheYCoordinateIncreases * 1e-6<Longitude>
         EarthRadius = 6371229.0 // in metres
     }
-    let (originEast,originNorth) =
+    projection
+
+// Triple of origin, increments, points note that this is in metres
+let makeGridDefinition1 (template:LambertConformalTemplate) (projection:LambertConverter.LambertProjection1) =
+    let height = int template.NumberOfPointsOnYAxis
+    let width = int template.NumberOfPointsOnXAxis
+    let (originX, originY) as origin =
         toLambert1 projection (float template.LatitudeOfFirstGridPoint*1e-6<Latitude>, float template.LongitudeOfFirstGridPoint*1e-6<Longitude>)
     let eastIncrement = float template.XDirectionGridLength * 1e-3 // Decode from milimetres
     let northIncrement = float template.YDirectionGridLength * 1e-3 // Decode from milimetres
+    (origin, (eastIncrement,northIncrement), (width,height))
+    (*
+    let metresToNauticalMiles = 0.000539957
+    let originNm = (originX*metresToNauticalMiles,originY*metresToNauticalMiles)
+    let eastNauticalMiles = eastIncrement * metresToNauticalMiles
+    let northNauticalMiles = northIncrement * metresToNauticalMiles
+    (originNm, (eastNauticalMiles,northNauticalMiles), (width,height))
+    *)
+
+let decodeLatitudeLongitude (template:LambertConformalTemplate) =
+    let projection = makeLambertProjection1 template
+    let ((originEast,originNorth),(eastIncrement,northIncrement),(width,height)) =
+        makeGridDefinition1 template projection
+    let result = Array.init height (fun _ -> Array.create width (0.0<Latitude>, 0.0<Longitude>)) // height x width jagged array
     for j = 0 to height - 1 do
         let northing = float j * northIncrement + originNorth
         for i = 0 to width - 1 do

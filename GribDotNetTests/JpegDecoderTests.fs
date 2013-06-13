@@ -27,7 +27,7 @@ type JpegDecoderTests() =
 
     let retrieveRelevantData (requestedProducts:HashSet<Product>) targetGrib =
         let relevantProducts =
-            targetGrib |> List.map (fun v -> v.DataProducts) |> List.concat |>
+            targetGrib |> List.collect (fun v -> v.DataProducts) |>
                 List.filter
                     (fun x ->
                         let t = x.ProductDefinitionSection.ProductDefinitionTemplate in

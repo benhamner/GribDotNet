@@ -25,6 +25,9 @@ type GridDecoderTests() =
     let expectedComponents = 8uy // U and V along grid
     let expectedDistanceDelta = 13545000u
     let expectedStandardParallel = 25000000u
+    let expectedReferenceLatitude = 25000000u
+    let expectedReferenceLongitude = 265000000u
+
     [<Test>]
     member test.LambertConformal() = 
         let targetGrib = grib1
@@ -81,6 +84,10 @@ type GridDecoderTests() =
         List.max standardParallels1 |> should equal expectedStandardParallel
         List.min standardParallels2 |> should equal expectedStandardParallel
         List.max standardParallels2 |> should equal expectedStandardParallel
+        List.min referenceLatitude |> should equal expectedReferenceLatitude
+        List.max referenceLatitude |> should equal expectedReferenceLatitude
+        List.min referenceLongitude |> should equal expectedReferenceLongitude
+        List.max referenceLongitude |> should equal expectedReferenceLongitude
 
     [<Test>]
     member test.``Decode grid locations`` () =
@@ -106,3 +113,30 @@ type GridDecoderTests() =
             let maximumLongitude = Array.max longitudes
             maximumLongitude |> should lessThanOrEqualTo lastLongitude // Longitudes should be increasing
         Array.iteri (fun i r -> checkRow r) single
+        (*
+    [<Test>]
+    member test.``Decode products``() = 
+        let targetGrib = grib2
+        let requestedProducts = new System.Collections.Generic.HashSet<Product>([Product.UComponentOfWind; Product.VComponentOfWind])
+        //let requestedProducts = new System.Collections.Generic.HashSet<Product>([Product.Temperature])
+        let isRequestedProduct x =
+            let t = x.ProductDefinitionSection.ProductDefinitionTemplate in
+            t.IsTypeZero && requestedProducts.Contains((Option.get (t.GetTypeZero())).ParameterNumber)
+        let products =
+            targetGrib |> List.collect (fun x -> x.DataProducts) |>
+            List.map (fun x -> (x.ProductDefinitionSection, x.ProductDefinitionSection.ProductDefinitionTemplate)) |>
+            List.filter (fun (_,x) -> x.IsTypeZero) |>
+            List.map (fun (x,y) -> (x, Option.get (y.GetTypeZero()))) |>
+            List.filter (fun (x,y) -> requestedProducts.Contains(y.ParameterNumber))
+        printf "Products: %d\n" (List.length products)
+        let filtered = products |> List.filter (fun (x,y) -> y.TypeOfFirstFixedSurface=HybridLevel)
+        printf "Filtered: %d\n" (List.length filtered)
+        let results =
+            filtered |> List.map (fun (x,y) -> y.ScaledValueOfFirstFixedSurface) |>
+            Seq.groupBy (fun x -> x) |> Seq.map (fun (x,y) -> (x, Seq.length y)) |> Seq.sortBy fst |>
+            Seq.map (fun x -> x.ToString()) |> String.concat ", "
+        printf "%s\n" results
+
+        for sigmaLevel in [1..50] do
+            printf "%d - %f\n" sigmaLevel (VerticalCoordinateDecoder.decodeSigma sigmaLevel)
+            *)

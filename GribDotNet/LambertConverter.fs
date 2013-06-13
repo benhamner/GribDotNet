@@ -25,13 +25,17 @@ let radiansToLatitudeDegrees (radians:float) = radians / System.Math.PI * 180.0<
 let radiansToLongitudeDegrees (radians:float) = radians / System.Math.PI * 180.0<Longitude>
 
 module Inner =
+    let boundLongitude (angle:float<Longitude>) =
+        let multiple = floor ((angle+180.0<Longitude>) / 360.0<Longitude>)
+        let result = angle - multiple*360.0<Longitude>
+        result
     let adjustAngle angle =
         let quarterPi = 0.25*System.Math.PI
         0.5 * angle + quarterPi
     let inverseAdjustAngle adjustedAngle =
         (adjustedAngle - 0.25*System.Math.PI) * 2.0
     let toEastingNorthing earthRadius n rho rho0 (referenceLongitude:float<Longitude>) (longitude:float<Longitude>) =
-        let theta = n*(longitudeDegreesToRadians longitude - longitudeDegreesToRadians referenceLongitude)
+        let theta = n*(longitudeDegreesToRadians (boundLongitude longitude) - longitudeDegreesToRadians (boundLongitude referenceLongitude))
         let easting = rho *sin theta*earthRadius
         let northing = (rho0 - rho*cos theta)*earthRadius
         (easting,northing)

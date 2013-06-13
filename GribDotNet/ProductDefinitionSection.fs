@@ -14,13 +14,40 @@ type FixedSurfaceType =
     | MeanSeaLevel
     | SpecificAltitudeAboveMeanSeaLevel
     | SpecificHeightLevelAboveGround
+    | SigmaLevel
+    | HybridLevel
     | LevelAtSpecifiedPressureDifferenceFromGroundToLevel
     | EntireAtmosphere
     | HighestTroposphericFreezingLevel
     | ConvectiveCloudTopLevel
     | LowestLevelOfTheWetBulbZero
     | EquilibriumLevel
+    | Missing
     | Other of byte
+    with
+    override this.ToString() =
+        match this with
+        | GroundOrWaterSurface -> "GroundOrWaterSurface"
+        | CloudBaseLevel -> "CloudBaseLevel"
+        | LevelOfCloudTops -> "LevelOfCloudTops"
+        | LevelOfZeroDegreeCelsiusIsotherm -> "LevelOfZeroDegreeCelsiusIsotherm"
+        | LevelOfAdiabaticCodensationLiftedFromTheSurface -> "LevelOfAdiabaticCodensationLiftedFromTheSurface"
+        | MaximumWindLevel -> "MaximumWindLevel"
+        | Tropopause -> "Tropopause"
+        | IsobaricSurface -> "IsobaricSurface"
+        | MeanSeaLevel -> "MeanSeaLevel"
+        | SpecificAltitudeAboveMeanSeaLevel -> "SpecificAltitudeAboveMeanSeaLevel"
+        | SpecificHeightLevelAboveGround -> "SpecificHeightLevelAboveGround"
+        | SigmaLevel -> "SigmaLevel"
+        | HybridLevel -> "HybridLevel"
+        | LevelAtSpecifiedPressureDifferenceFromGroundToLevel -> "LevelAtSpecifiedPressureDifferenceFromGroundToLevel"
+        | EntireAtmosphere -> "EntireAtmosphere"
+        | HighestTroposphericFreezingLevel -> "HighestTroposphericFreezingLevel"
+        | ConvectiveCloudTopLevel -> "ConvectiveCloudTopLevel"
+        | LowestLevelOfTheWetBulbZero -> "LowestLevelOfTheWetBulbZero"
+        | EquilibriumLevel -> "EquilibriumLevel"
+        | Missing -> "Missing"
+        | Other(_) -> "Other"
 
 let toFixedSurfaceType byte =
     match byte with
@@ -35,12 +62,15 @@ let toFixedSurfaceType byte =
     | 101uy -> MeanSeaLevel
     | 102uy -> SpecificAltitudeAboveMeanSeaLevel
     | 103uy -> SpecificHeightLevelAboveGround
+    | 104uy -> SigmaLevel
+    | 105uy -> HybridLevel
     | 108uy -> LevelAtSpecifiedPressureDifferenceFromGroundToLevel
     | 200uy -> EntireAtmosphere
     | 204uy -> HighestTroposphericFreezingLevel
     | 243uy -> ConvectiveCloudTopLevel
     | 245uy -> LowestLevelOfTheWetBulbZero
     | 247uy -> EquilibriumLevel
+    | 255uy -> Missing
     | _     -> Other byte
 
 type ProductCategory = 
@@ -52,6 +82,17 @@ type ProductCategory =
     | ForecastRadarImagery
     | PhysicalAtmposhpericProperties
     | Other of byte
+    with 
+    override this.ToString() =
+        match this with
+        | Temperature -> "Temperature"
+        | Moisture -> "Moisture"
+        | Momentum -> "Momentum"
+        | Mass -> "Mass"
+        | ThermodynamicStabilityIndicies -> "ThermodynamicStabilityIndicies"
+        | ForecastRadarImagery -> "ForecastRadarImagery"
+        | PhysicalAtmposhpericProperties -> "PhysicalAtmposhpericProperties"
+        | Other(_) -> "Other"
 
 let toProductCategory discipline byte =
     match discipline with
@@ -80,6 +121,21 @@ type Product =
     | Pressure
     | GeopotentialHeight
     | Other of byte
+    with
+    override this.ToString() =
+        match this with
+        | Temperature -> "Temperature"
+        | PotentialTemperature -> "PotentialTemperature"
+        | SpecificHumidity -> "SpecificHumidity"
+        | RelativeHumidity -> "RelativeHumidity"
+        | WindDirection -> "WindDirection"
+        | WindSpeed -> "WindSpeed"
+        | UComponentOfWind -> "UComponentOfWind"
+        | VComponentOfWind -> "VComponentOfWind"
+        | VerticalVelocityPressure -> "VerticalVelocityPressure"
+        | Pressure -> "Pressure"
+        | GeopotentialHeight -> "GeopotentialHeight"
+        | Other(_) -> "Other"
 
 let toProduct : Discipline -> ProductCategory -> byte -> Product = fun discipline category parameterNumber ->
     match discipline with 
@@ -123,10 +179,10 @@ type ProductDefinitionTemplateType0 = {
     ForecastTime: uint32;
     TypeOfFirstFixedSurface: FixedSurfaceType;
     ScaleFactorOfFirstFixedSurface: byte;
-    ScaledValueOfFirstFixedSurvace: uint32;
+    ScaledValueOfFirstFixedSurface: uint32;
     TypeOfSecondFixedSurface: FixedSurfaceType;
     ScaleFactorOfSecondFixedSurface: byte;
-    ScaledValueOfSecondFixedSurvace: uint32;
+    ScaledValueOfSecondFixedSurface: uint32;
 }
 
 type ProductDefinitionTemplate =
@@ -158,10 +214,10 @@ let readProductDefinitionTemplateType0 (reader:System.IO.BinaryReader) disciplin
         ForecastTime = System.BitConverter.ToUInt32(Array.rev(reader.ReadBytes(4)), 0);
         TypeOfFirstFixedSurface = toFixedSurfaceType (reader.ReadByte());
         ScaleFactorOfFirstFixedSurface = reader.ReadByte();
-        ScaledValueOfFirstFixedSurvace = System.BitConverter.ToUInt32(Array.rev(reader.ReadBytes(4)), 0);
+        ScaledValueOfFirstFixedSurface = System.BitConverter.ToUInt32(Array.rev(reader.ReadBytes(4)), 0);
         TypeOfSecondFixedSurface = toFixedSurfaceType (reader.ReadByte());
         ScaleFactorOfSecondFixedSurface = reader.ReadByte();
-        ScaledValueOfSecondFixedSurvace = System.BitConverter.ToUInt32(Array.rev(reader.ReadBytes(4)), 0);
+        ScaledValueOfSecondFixedSurface = System.BitConverter.ToUInt32(Array.rev(reader.ReadBytes(4)), 0);
     }
 
 type ProductDefinitionSection = {
