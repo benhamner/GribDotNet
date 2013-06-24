@@ -25,6 +25,32 @@ type JpegDecoderTests() =
     let temperatureProducts = new HashSet<Product>([Product.Temperature])
     let windProducts = new HashSet<Product>([Product.UComponentOfWind; Product.VComponentOfWind])
 
+    let retrieveRelevantGrids (requestedProduct:Product) targetGrib =
+        let relevantProducts =
+            targetGrib |> List.collect (fun v -> (v.DataProducts)) |>
+            List.map
+                (fun x ->
+                    (x.ProductDefinitionSection.ProductDefinitionTemplate,
+                        x.DataRepresentationSection.DataRepresentationTemplate,
+                        x.DataSection.Data)) |>
+            List.filter
+                    (fun (t,r,d) ->
+                        t.IsTypeZero && requestedProduct = (Option.get (t.GetTypeZero())).ParameterNumber) |>
+            List.map
+                (fun (t,r,d) -> t.GetTypeZero() |> Option.get, DataRepresentationSection.asTemplate5_40 r, d)
+        let relevantGrids =
+            relevantProducts |>
+            List.map
+                (fun (t,r,d) ->
+                    let vertical = VerticalCoordinateDecoder.decodeVertical t.TypeOfFirstFixedSurface (float t.ScaledValueOfFirstFixedSurface)
+                    let altitude =
+                        match vertical with
+                        | Choice1Of2(x) -> x
+                        | Choice2Of2(y) -> -1.0 //failwith (sprintf "Could not decode vertical coordinate %s" (y.ToString()))
+                    (altitude,
+                        JpegDecoder.decodeJpegGrid r.ReferenceValue r.BinaryScaleFactor r.DecimalScaleFactor d |> Option.get))
+        relevantGrids
+
     let retrieveRelevantData (requestedProducts:HashSet<Product>) targetGrib =
         let relevantProducts =
             targetGrib |> List.collect (fun v -> v.DataProducts) |>
@@ -105,6 +131,30 @@ type JpegDecoderTests() =
                     cell |> should greaterThan 190.0 // Should be over -80C
                     cell |> should lessThan 290.0 // Should be under 20C
 
+                    (*
+    [<Test>]
+    member test.TemperatureAtAltitudes() =
+        //let targetGrib = readGribFromPath "C:/Temporary/KittyHawk/13020100.rap.t00z.awp130bgrbf00.grib2"
+        let targetGrib = grib2
+        let temperatureGrids = retrieveRelevantGrids Product.Temperature targetGrib
+        for (altitude, grid) in temperatureGrids do
+            printfn "%f: %f" altitude (grid.[1].[225])
+
+    [<Test>]
+    member test.WindAtAltitudes() =
+        //let targetGrib = readGribFromPath "C:/Temporary/KittyHawk/13020100.rap.t00z.awp130bgrbf00.grib2"
+        let targetGrib = grib2
+        let temperatureGrids = retrieveRelevantGrids Product.UComponentOfWind targetGrib
+        printfn "Origin"
+        for (altitude, grid) in temperatureGrids do
+            printfn "%f: %f" altitude (grid.[1].[1])
+        printfn "Middle"
+        for (altitude, grid) in temperatureGrids do
+            printfn "%f: %f" altitude (grid.[150].[200])
+        printfn "Edge"
+        for (altitude, grid) in temperatureGrids do
+            printfn "%f: %f" altitude (grid.[300].[300])
+            *)
     [<Test>]
     member test.WindSpeedDecoding() =
         let targetGrib = grib2
