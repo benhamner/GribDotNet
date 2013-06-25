@@ -48,7 +48,7 @@ type JpegDecoderTests() =
                         | Choice1Of2(x) -> x
                         | Choice2Of2(y) -> -1.0 //failwith (sprintf "Could not decode vertical coordinate %s" (y.ToString()))
                     (altitude,
-                        JpegDecoder.decodeJpegGrid r.ReferenceValue r.BinaryScaleFactor r.DecimalScaleFactor d |> Option.get))
+                        JpegDecoder.decodeJpegGrid r.ReferenceValue r.BinaryScaleFactor r.DecimalScaleFactor r.NumberOfBitsRequiredToHoldTheResultingScaledAndReferencedDataValues d |> Option.get))
         relevantGrids
 
     let retrieveRelevantData (requestedProducts:HashSet<Product>) targetGrib =
@@ -118,20 +118,20 @@ type JpegDecoderTests() =
         hasHue |> should equal false
         let hasSaturation = List.exists (fun (_,b) -> checkHasSaturation b) bitmaps
         hasSaturation |> should equal false
-
+        
     [<Test>]
     member test.TemperatureDecoding() =
         let targetGrib = grib2
         let temperatureGrids =
             retrieveRelevantData temperatureProducts targetGrib |>
-            List.map (fun (t, b) -> JpegDecoder.decodeJpegGrid t.ReferenceValue t.BinaryScaleFactor t.DecimalScaleFactor b |> Option.get)
+            List.map (fun (t, b) -> JpegDecoder.decodeJpegGrid t.ReferenceValue t.BinaryScaleFactor t.DecimalScaleFactor t.NumberOfBitsRequiredToHoldTheResultingScaledAndReferencedDataValues b |> Option.get)
+
         for grid in temperatureGrids do
             for row in grid do
                 for cell in row do
-                    cell |> should greaterThan 190.0 // Should be over -80C
-                    cell |> should lessThan 290.0 // Should be under 20C
+                    cell |> should greaterThan 180.0 // Should be over -80C
+                    cell |> should lessThan 320.0 // Should be under 20C
 
-                    (*
     [<Test>]
     member test.TemperatureAtAltitudes() =
         //let targetGrib = readGribFromPath "C:/Temporary/KittyHawk/13020100.rap.t00z.awp130bgrbf00.grib2"
@@ -139,7 +139,7 @@ type JpegDecoderTests() =
         let temperatureGrids = retrieveRelevantGrids Product.Temperature targetGrib
         for (altitude, grid) in temperatureGrids do
             printfn "%f: %f" altitude (grid.[1].[225])
-
+          
     [<Test>]
     member test.WindAtAltitudes() =
         //let targetGrib = readGribFromPath "C:/Temporary/KittyHawk/13020100.rap.t00z.awp130bgrbf00.grib2"
@@ -154,13 +154,13 @@ type JpegDecoderTests() =
         printfn "Edge"
         for (altitude, grid) in temperatureGrids do
             printfn "%f: %f" altitude (grid.[300].[300])
-            *)
+
     [<Test>]
     member test.WindSpeedDecoding() =
         let targetGrib = grib2
         let temperatureGrids =
             retrieveRelevantData (new HashSet<Product>([Product.WindSpeed])) targetGrib |>
-            List.map (fun (t, b) -> JpegDecoder.decodeJpegGrid t.ReferenceValue t.BinaryScaleFactor t.DecimalScaleFactor b |> Option.get)
+            List.map (fun (t, b) -> JpegDecoder.decodeJpegGrid t.ReferenceValue t.BinaryScaleFactor t.DecimalScaleFactor t.NumberOfBitsRequiredToHoldTheResultingScaledAndReferencedDataValues b |> Option.get)
         let mutable maxValue = 0.0
         let mutable minValue = 0.0
         for grid in temperatureGrids do
@@ -180,7 +180,7 @@ type JpegDecoderTests() =
         let targetGrib = grib2
         let temperatureGrids =
             retrieveRelevantData windProducts targetGrib |>
-            List.map (fun (t, b) -> JpegDecoder.decodeJpegGrid t.ReferenceValue t.BinaryScaleFactor t.DecimalScaleFactor b |> Option.get)
+            List.map (fun (t, b) -> JpegDecoder.decodeJpegGrid t.ReferenceValue t.BinaryScaleFactor t.DecimalScaleFactor t.NumberOfBitsRequiredToHoldTheResultingScaledAndReferencedDataValues b |> Option.get)
         let mutable maxValue = 0.0
         let mutable minValue = 0.0
         for grid in temperatureGrids do
@@ -194,3 +194,4 @@ type JpegDecoderTests() =
                     //cell |> should lessThan 290.0 // Should be under 20C
         printf "Maximum wind: %f m/s\n" maxValue
         printf "Minimum wind: %f m/s\n" minValue
+

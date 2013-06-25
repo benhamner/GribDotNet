@@ -21,5 +21,6 @@ let decodeJpegData (template:DataRepresentationTemplate5_40) (section:DataSectio
             template.ReferenceValue
             template.BinaryScaleFactor
             template.DecimalScaleFactor
+            template.NumberOfBitsRequiredToHoldTheResultingScaledAndReferencedDataValues
             section.Data
     result
