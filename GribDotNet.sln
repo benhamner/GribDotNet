@@ -5,6 +5,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GribDotNet", "GribDotNet\Gr
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GribDotNetTests", "GribDotNetTests\GribDotNetTests.fsproj", "{BF27F01B-EDCC-44C6-95CA-E42AF8DCD4E1}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GribSummaryAndImages", "GribSummaryAndImages\GribSummaryAndImages.fsproj", "{8B61B41E-2C9E-454F-9485-D79C2A616A54}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{BF27F01B-EDCC-44C6-95CA-E42AF8DCD4E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF27F01B-EDCC-44C6-95CA-E42AF8DCD4E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF27F01B-EDCC-44C6-95CA-E42AF8DCD4E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B61B41E-2C9E-454F-9485-D79C2A616A54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B61B41E-2C9E-454F-9485-D79C2A616A54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B61B41E-2C9E-454F-9485-D79C2A616A54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B61B41E-2C9E-454F-9485-D79C2A616A54}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

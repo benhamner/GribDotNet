@@ -5,12 +5,12 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>2d465fe7-95ad-48de-a99b-47a63b896acb</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>GribDotNet</RootNamespace>
-    <AssemblyName>GribDotNet</AssemblyName>
+    <ProjectGuid>8b61b41e-2c9e-454f-9485-d79c2a616a54</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>GribSummaryAndImages</RootNamespace>
+    <AssemblyName>GribSummaryAndImages</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <Name>GribDotNet</Name>
+    <Name>GribSummaryAndImages</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,7 +20,9 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Debug\GribDotNet.XML</DocumentationFile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DocumentationFile>bin\Debug\GribSummaryAndImages.XML</DocumentationFile>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,40 +31,29 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Release\GribDotNet.XML</DocumentationFile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DocumentationFile>bin\Release\GribSummaryAndImages.XML</DocumentationFile>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CSJ2K">
-      <HintPath>..\Libraries\CSJ2K.dll</HintPath>
-    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ParsingUtilities.fs" />
-    <Compile Include="LambertConverter.fs" />
-    <Compile Include="IndicatorSection.fs" />
-    <Compile Include="IdentificationSection.fs" />
-    <Compile Include="LocalUseSection.fs" />
-    <Compile Include="GridDefinitionSection.fs" />
-    <Compile Include="ProductDefinitionSection.fs" />
-    <Compile Include="DataRepresentationSection.fs" />
-    <Compile Include="BitMapSection.fs" />
-    <Compile Include="JpegDecoder.fs" />
-    <Compile Include="DataSection.fs" />
-    <Compile Include="Section.fs" />
-    <Compile Include="GribReader.fs" />
-    <Compile Include="VerticalCoordinateDecoder.fs" />
-    <Compile Include="Summary.fs" />
-    <None Include="Script.fsx" />
-    <None Include="packages.config" />
-    <None Include="app.config" />
+    <Compile Include="Program.fs" />
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GribDotNet\GribDotNet.fsproj">
+      <Name>GribDotNet</Name>
+      <Project>{2d465fe7-95ad-48de-a99b-47a63b896acb}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>

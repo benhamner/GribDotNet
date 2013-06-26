@@ -16,11 +16,15 @@ let bitmapToGrid referenceValue binaryScaling decimalScaling numBitsStoringValue
             row.[w] <- float (bitmap.GetPixel(w, h).GetBrightness()) * multiplicand + addend
     result
 
-let decodeJpegGrid (referenceValue:float32) (binaryScaling:int16) (decimalScaling:int16) (numBitsStoringValue: byte) bytes =
+let bytesToBitmap bytes = 
     let maybeBitmap =
         try
             CSJ2K.J2kImage.FromBytes(bytes) :?> Bitmap |> Some
         with
             | :? System.InvalidOperationException -> None
+    maybeBitmap
+
+let decodeJpegGrid (referenceValue:float32) (binaryScaling:int16) (decimalScaling:int16) (numBitsStoringValue: byte) bytes =
+    let maybeBitmap = bytesToBitmap bytes
     let result = Option.map (bitmapToGrid (float referenceValue) (float binaryScaling) (float decimalScaling) (float numBitsStoringValue)) maybeBitmap
     result
