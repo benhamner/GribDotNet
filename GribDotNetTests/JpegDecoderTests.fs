@@ -1,5 +1,7 @@
 ﻿module JpegDecoderTests
 
+open GribDotNet
+
 open NUnit.Framework
 open FsUnit
 

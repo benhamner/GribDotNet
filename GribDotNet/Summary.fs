@@ -1,4 +1,4 @@
-﻿module Summary
+﻿module GribDotNet.Summary
 
 open GribReader
 open Microsoft.FSharp.Reflection

@@ -1,5 +1,7 @@
 ﻿module GridDefinitionSectionTests
 
+open GribDotNet
+
 open GridDefinitionSection
 
 open FromHex

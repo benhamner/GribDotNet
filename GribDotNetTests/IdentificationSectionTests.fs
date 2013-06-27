@@ -1,5 +1,7 @@
 ﻿module IdentificationSectionTests
 
+open GribDotNet
+
 open IdentificationSection
 
 open FromHex

@@ -1,5 +1,7 @@
 ﻿module DataSectionTests
 
+open GribDotNet
+
 open DataSection
 
 open FromHex

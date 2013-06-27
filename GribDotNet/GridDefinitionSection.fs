@@ -1,4 +1,4 @@
-﻿module GridDefinitionSection
+﻿module GribDotNet.GridDefinitionSection
 
 open LambertConverter
 

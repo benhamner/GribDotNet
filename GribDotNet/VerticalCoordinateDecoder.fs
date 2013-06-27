@@ -1,4 +1,4 @@
-﻿module VerticalCoordinateDecoder
+﻿module GribDotNet.VerticalCoordinateDecoder
 
 open ProductDefinitionSection
 

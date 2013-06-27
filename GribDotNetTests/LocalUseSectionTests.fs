@@ -1,5 +1,7 @@
 ﻿module LocalUseSectionTests
 
+open GribDotNet
+
 open LocalUseSection
 
 open FromHex

@@ -1,4 +1,4 @@
-﻿module LocalUseSection
+﻿module GribDotNet.LocalUseSection
 
 type LocalUseSection = {
     SectionLength: uint32;

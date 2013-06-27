@@ -1,4 +1,4 @@
-﻿module IdentificationSection
+﻿module GribDotNet.IdentificationSection
 
 type SignficanceOfReferenceTime =
    | Analysis

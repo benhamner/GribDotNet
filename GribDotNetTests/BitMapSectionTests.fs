@@ -1,5 +1,7 @@
 ﻿module BitMapSectionTests
 
+open GribDotNet
+
 open BitMapSection
 
 open FromHex

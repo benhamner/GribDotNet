@@ -1,4 +1,4 @@
-﻿module ProductDefinitionSection
+﻿module GribDotNet.ProductDefinitionSection
 
 open IndicatorSection
 

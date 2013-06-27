@@ -1,4 +1,4 @@
-﻿module JpegDecoder
+﻿module GribDotNet.JpegDecoder
 
 open System.Drawing
 

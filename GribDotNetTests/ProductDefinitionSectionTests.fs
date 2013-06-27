@@ -1,7 +1,11 @@
 ﻿module ProductDefinitionSectionTests
 
+open GribDotNet
+
 open IndicatorSection
 open ProductDefinitionSection
+
+open GribDotNet
 
 open FromHex
 

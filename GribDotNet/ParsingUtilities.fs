@@ -1,4 +1,4 @@
-﻿module ParsingUtilities
+﻿module GribDotNet.ParsingUtilities
 
 let bytesToInt16 bigEndianBytes =
     let littleEndianBytes = Array.rev bigEndianBytes

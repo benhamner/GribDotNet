@@ -6,6 +6,7 @@
 #r "C:\\Program Files (x86)\NUnit 2.6.2\\bin\\framework\\nunit.framework.dll"
 #load "GribReaderTests.fs"
 
+open GribDotNet
 open ProductDefinitionSection
 open GribReader
 
@@ -44,7 +45,7 @@ let productCounts = prods |> Seq.groupBy Operators.id |> Seq.map (fun (x,y) -> (
 let uWindProductTemplates = (temps |> List.choose (fun t -> match t.ParameterCategory with | Momentum -> (if (t.ParameterNumber = Product.UComponentOfWind) then Some t else None) | _ -> None))
 uWindProductTemplates.Length
 
-[for p in uWindProductTemplates -> p.TypeOfFirstFixedSurface, p.ScaleFactorOfFirstFixedSurface, p.ScaledValueOfFirstFixedSurvace, p.TypeOfSecondFixedSurface, p.ForecastTime, p.IndicatorOfUnitOfTimeRange]
+[for p in uWindProductTemplates -> p.TypeOfFirstFixedSurface, p.ScaleFactorOfFirstFixedSurface, p.ScaledValueOfFirstFixedSurface, p.TypeOfSecondFixedSurface, p.ForecastTime, p.IndicatorOfUnitOfTimeRange]
 
 // Define your library scripting code here
 

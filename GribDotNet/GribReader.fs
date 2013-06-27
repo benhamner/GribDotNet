@@ -1,4 +1,4 @@
-﻿module GribReader
+﻿module GribDotNet.GribReader
 
 open IndicatorSection
 open IdentificationSection

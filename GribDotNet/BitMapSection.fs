@@ -1,4 +1,4 @@
-﻿module BitMapSection
+﻿module GribDotNet.BitMapSection
 
 type BitMapSection = {
     SectionLength: uint32;

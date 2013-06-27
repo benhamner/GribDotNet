@@ -1,5 +1,7 @@
 ﻿module LambertConverterTests
 
+open GribDotNet
+
 open LambertConverter
 
 open NUnit.Framework

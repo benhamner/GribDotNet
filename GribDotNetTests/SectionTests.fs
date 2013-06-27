@@ -1,5 +1,7 @@
 ﻿module SectionTests
 
+open GribDotNet
+
 open Section
 
 open NUnit.Framework

@@ -1,5 +1,7 @@
 ﻿module IndicatorSectionTests
 
+open GribDotNet
+
 open IndicatorSection
 
 open FromHex

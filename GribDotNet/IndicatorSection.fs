@@ -1,4 +1,4 @@
-﻿module IndicatorSection
+﻿module GribDotNet.IndicatorSection
 
 exception GribIndicatorReadError of string
 

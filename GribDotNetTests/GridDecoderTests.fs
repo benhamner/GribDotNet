@@ -1,5 +1,7 @@
 ﻿module GridDecoderTests
 
+open GribDotNet
+
 open GribReader
 open GridDefinitionSection
 open ProductDefinitionSection

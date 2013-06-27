@@ -1,5 +1,7 @@
 ﻿module DataRepresentationSectionTests
 
+open GribDotNet
+
 open DataRepresentationSection
 
 open FromHex

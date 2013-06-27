@@ -1,4 +1,4 @@
-﻿module DataSection
+﻿module GribDotNet.DataSection
 
 open DataRepresentationSection
 

@@ -1,4 +1,4 @@
-﻿module Section
+﻿module GribDotNet.Section
 
 open IndicatorSection
 open IdentificationSection

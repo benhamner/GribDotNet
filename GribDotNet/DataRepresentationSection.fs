@@ -1,4 +1,4 @@
-﻿module DataRepresentationSection
+﻿module GribDotNet.DataRepresentationSection
 
 open ParsingUtilities
 

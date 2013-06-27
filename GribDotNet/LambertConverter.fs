@@ -1,4 +1,4 @@
-﻿module LambertConverter
+﻿module GribDotNet.LambertConverter
 
 [<Measure>] type Latitude
 [<Measure>] type Longitude
