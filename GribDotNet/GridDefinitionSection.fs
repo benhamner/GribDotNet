@@ -48,12 +48,15 @@ let makeLambertProjection1 (template:LambertConformalTemplate) =
     }
     projection
 
+let getOriginLatitudeLongitude (template:LambertConformalTemplate) =
+    (float template.LatitudeOfFirstGridPoint*1e-6<Latitude>, float template.LongitudeOfFirstGridPoint*1e-6<Longitude>)
+
 // Triple of origin, increments, points note that this is in metres
 let makeGridDefinition1 (template:LambertConformalTemplate) (projection:LambertConverter.LambertProjection1) =
     let height = int template.NumberOfPointsOnYAxis
     let width = int template.NumberOfPointsOnXAxis
     let (originX, originY) as origin =
-        toLambert1 projection (float template.LatitudeOfFirstGridPoint*1e-6<Latitude>, float template.LongitudeOfFirstGridPoint*1e-6<Longitude>)
+        toLambert1 projection (getOriginLatitudeLongitude template)
     let eastIncrement = float template.XDirectionGridLength * 1e-3 // Decode from milimetres
     let northIncrement = float template.YDirectionGridLength * 1e-3 // Decode from milimetres
     (origin, (eastIncrement,northIncrement), (width,height))
