@@ -20,4 +20,4 @@ type IdentificationSectionTests() =
 
     [<Test>]
     member test.ReferenceTime() =
-        identificationSection.ReferenceTime |> should equal (new System.DateTime(year=2013, month=3, day=18, hour=23, minute=0, second=0))
+        identificationSection.ReferenceTime |> should equal (new System.DateTime(year=2013, month=3, day=17, hour=23, minute=0, second=0))
